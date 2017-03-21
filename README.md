@@ -35,7 +35,7 @@ ln -s tensorflow-models/inception inception
 cd inception
 ```
 
-***NOTE*** (2017-03-21 기준) `tensorflow/models` repository를 TF 1.0 버전으로 올리는 작업중인 `update-models-1.0` branch가 아직 merging되지 않음.
+> ***NOTE*** (2017-03-21 기준) `tensorflow/models` repository를 TF 1.0 버전으로 올리는 작업중인 `update-models-1.0` branch가 아직 merging되지 않음.
 
 `update-models-1.0` branch checkout.
 ```sh
@@ -106,8 +106,8 @@ tuk
 ### Change information of the dataset
 자신의 데이터셋에 맞게 `flowers_data.py`의 메소드들을 수정합니다.
 
-* `num_classes` 클래스의 수 (즉, `$LABELS_FILE` 파일의 라인 수)
-* `num_examples_per_epoch` training, validation 데이터셋 샘플의 수
+* `num_classes()` 클래스의 수 (즉, `$LABELS_FILE` 파일의 라인 수)
+* `num_examples_per_epoch()` training, validation 데이터셋 샘플의 수
 
 위에 예시로 든 제 데이터셋의 경우 `flowers_data.py`을 다음과 같이 수정합니다:
 ```python
@@ -155,11 +155,15 @@ bazel-bin/inception/build_image_data \
   --num_threads=1
 ```
 
-* `train_directory` training 데이터 디렉터리
-* `validation_directory` validation 데이터 디렉터리
+* `train_directory` training 데이터셋 디렉터리
+* `validation_directory` validation 데이터셋 디렉터리
 * `output_directory` 변환된 TFRecord들을 저장할 디렉터리
+* `labels_file` $LABELS_FILE 위치
+* `train_shards` training 데이터셋 분할 수
+* `validation_shards` validation 데이터셋 분할 수
+* `num_threads` 전처리에 사용할 thread 수
 
-@@@@@@@@@@@@@@TODO@@@@@@@@@@@@@@@@
+`train_shards`와 `validation_shards`는 각각 training, validation 데이터셋을 총 몇개로 분할하여 TFRecord 파일로 저장할 것인지 정하는 파라미터입니다. 너무 작으면 분할(shard) 하나의 크기가 너무 커서 메모리를 많이 차지하게 되고, 너무 크면 파일이 너무 많이 생성됩니다. 분할 하나당 1024개의 이미지가 들어가면 적당합니다. 즉, `train_shards = num_train_examples / 1024`.
 
 완료 후 디렉터리 구조는 이렇습니다:
 ```sh
@@ -228,14 +232,19 @@ bazel-bin/inception/flowers_train \
   --pretrained_model_checkpoint_path="${MODEL_PATH}" \
   --fine_tune=True \
   --initial_learning_rate=0.01 \
-  --batch_size=24 \
-  --input_queue_memory_factor=1
+  --batch_size=24
 ```
-* `batch_size`
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@TODO@!!!!!!!!!!!!!!!!!
+* `train_dir` 학습 기록과 학습된 모델을 저장할 디렉터리
+* `data_dir` 데이터셋 디렉터리
+* `pretrained_model_checkpoint_path` pre-trained 모델 디렉터리
+* `fine_tune` fine-tuning 여부
+* `initial_learning_rate` learning rate (아래의 `Empirically finding a good learning rate` 참고)
+* `batch_size` 한번에 학습할 이미지의 수
 
-이는 100 step 마다 요약을, 5000 step 마다 모델을 저장합니다.
+> ***NOTE*** `batch_size`는 크면 좋지만, GPU 메모리는 한정되어 있습니다. `batch_size`를 줄이게 될 경우, learning rate 또한 함께 줄여야합니다.
+
+이는 100 step 마다 요약을, 5000 step 마다 모델을 저장합니다. 아래는 학습시 출력 예시입니다:
 
 ```sh
 ...
