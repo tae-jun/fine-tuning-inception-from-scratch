@@ -36,7 +36,7 @@ ln -s tensorflow-models/inception inception
 cd inception
 ```
 
-> ***NOTE*** (2017-03-21 기준) `tensorflow/models` repository를 TF 1.0 버전으로 올리는 작업중인 `update-models-1.0` branch가 아직 merging되지 않음.
+> ***NOTE*** (2017-03-21 기준) `tensorflow/models` repository를 TF 1.0 버전으로 올리는 작업중인 `update-models-1.0` branch가 아직 merging되지 않았습니다.
 
 TensorFlow 1.0 버전을 사용할 경우 `update-models-1.0` 브랜치를 체크아웃합니다.
 
