@@ -316,9 +316,11 @@ bazel-bin/inception/flowers_eval \
 ```
 
 ## Empirically finding a good learning rate
-학습 결과를 좌우하는 `hyperparameter`는 5-10개로 다양하지만, 처음부터 이를 모두 이해하고 조정하는 것은 어렵습니다. 본 섹션에서는 그 중 학습에 많은 영향을 미치는 learning rate를 조정하는 법에 대한 팁을 드립니다. Learning rate는 학습의 속도를 조정하는 hyperparameter로 크고 작음에 따라 학습에 다음과 같은 영향을 미칩니다:
+Inception 모델에서 학습 결과를 좌우하는 hyperparameter들은 5-10개로 다양하지만, 처음부터 이를 모두 이해하고 조정하는 것은 어렵습니다. 본 섹션에서는 그 중 학습에 많은 영향을 미치는 learning rate를 조정하는 법에 대한 팁을 드립니다. Learning rate는 학습의 속도를 조정하는 hyperparameter로 크고 작음에 따라 학습에 다음과 같은 영향을 미칩니다:
 
-![learning rates](img/learningrates.jpeg)
+<p align="center">
+  <img src="https://github.com/tae-jun/fine-tuning-inception-from-scratch/blob/master/img/learningrates.jpeg?raw=true" alt="learning rates"/>
+</p>
 
 > Source: [Stanford CS class CS231n: Convolutional Neural Networks for Visual Recognition](http://cs231n.github.io/neural-networks-3/)
 
