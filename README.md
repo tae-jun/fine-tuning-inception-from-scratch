@@ -18,9 +18,10 @@ source activate inception
 ```
 TensorFlow 설치:
 ```sh
-pip install tensorflow
 # GPU를 사용할 경우
 # pip install tensorflow-gpu
+
+pip install tensorflow
 ```
 설치 확인:
 ```sh
